@@ -3,7 +3,7 @@ services:
     image: redis:latest
   crud-app:
     build:
-      context: './crud-api'
+      context: '.'
       dockerfile: "./Dockerfile"
     image: "crud-app:latest"
     ports:
