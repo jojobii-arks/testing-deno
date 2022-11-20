@@ -1,0 +1,12 @@
+services:
+  redis:
+    image: redis:latest
+  crud-app:
+    build:
+      context: './crud-api'
+      dockerfile: "./Dockerfile"
+    image: "crud-app:latest"
+    ports:
+      - 3000:3000
+    depends_on:
+      - redis
