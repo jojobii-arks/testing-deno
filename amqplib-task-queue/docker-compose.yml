@@ -1,0 +1,20 @@
+services:
+  rabbitmq:
+    image: 'rabbitmq:3.11-management'
+    expose:
+      - 5672:5672
+  consumer:
+    build:
+      context: './consumer'
+      dockerfile: Dockerfile
+    image: "consumer"
+    depends_on: 
+      - rabbitmq
+  producer:
+    build:
+      context: './producer'
+      dockerfile: Dockerfile
+    image: "producer"
+    depends_on: 
+      - rabbitmq
+  

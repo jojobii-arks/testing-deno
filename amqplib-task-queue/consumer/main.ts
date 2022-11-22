@@ -1,9 +1,11 @@
-import { connect } from "https://deno.land/x/amqp@v0.21.0/mod.ts";
-import { SOFT_ERROR_CONTENT_TOO_LARGE } from "https://deno.land/x/amqp@v0.21.0/src/amqp_constants.ts";
+import {
+  BasicDeliverHandler,
+  connect,
+} from "https://deno.land/x/amqp@v0.21.0/mod.ts";
 import { sleep } from "https://deno.land/x/sleep@v1.2.1/mod.ts";
 
 const connection = await connect({
-  hostname: "localhost",
+  hostname: "rabbitmq",
   port: 5672,
   username: "guest",
   password: "guest",
@@ -15,7 +17,7 @@ const queueName = "my.queue";
 await channel.declareQueue({ queue: queueName });
 await channel.consume(
   { queue: queueName },
-  async (args: any, props: any, data: any) => {
+  (async (args, _props, data) => {
     console.log("hi");
     await sleep(2);
     const raw = new TextDecoder().decode(data);
@@ -27,5 +29,5 @@ await channel.consume(
     } else {
       await channel.ack({ deliveryTag: args.deliveryTag });
     }
-  },
+  }) as BasicDeliverHandler,
 );
