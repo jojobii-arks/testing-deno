@@ -1,6 +1,7 @@
 import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { z, ZodError } from "https://deno.land/x/zod@v3.19.1/mod.ts";
 import redis from "./redis.ts";
+import env from "./env.ts";
 
 const app = new Application();
 
@@ -15,7 +16,7 @@ const noteSchema = z.object({
 const router = new Router();
 
 router
-  .get("/", async ({ request, response }) => {
+  .get("/", async ({ response }) => {
     response.body = { data: await redis.smembers("notes") };
   })
   .post("/", async ({ request, response }) => {
@@ -46,9 +47,10 @@ router
         response.body = { error: "invalid JSON syntax" };
         response.status = 400;
       }
-      if (error instanceof ZodError) {
+      if (error instanceof ZodError || error instanceof RangeError) {
         response.status = 400;
       } else {
+        console.error(error);
         response.status = 500;
       }
     }
@@ -81,9 +83,10 @@ router
         response.body = { error: "invalid JSON syntax" };
         response.status = 400;
       }
-      if (error instanceof ZodError) {
+      if (error instanceof ZodError || error instanceof RangeError) {
         response.status = 400;
       } else {
+        console.error(error);
         response.status = 500;
       }
     }
@@ -123,4 +126,4 @@ app.addEventListener("listen", ({ hostname, port, secure }) => {
   );
 });
 
-await app.listen({ port: 3000 });
+await app.listen({ port: Number(env.PORT) });

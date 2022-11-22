@@ -1,0 +1,22 @@
+services:
+  # profile: default
+  
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+
+  # profile: prod
+
+  crud-app:
+    build:
+      context: '.'
+      dockerfile: "./Dockerfile"
+    image: "crud-app:latest"
+    ports:
+      - 3000:3000
+    depends_on:
+      - redis
+    profiles:
+      - prod
+   
