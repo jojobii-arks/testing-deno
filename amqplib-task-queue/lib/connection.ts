@@ -10,7 +10,7 @@ const connection = await pingUntilSuccess(
       username: "guest",
       password: "guest",
       heartbeatInterval: 5,
-    }).then(() => console.log("Successfully connected!")),
+    }),
 );
 
 export default connection;

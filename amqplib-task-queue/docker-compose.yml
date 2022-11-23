@@ -4,48 +4,25 @@ services:
     ports:
       - 5672:5672
 
-  consumer-a:
+  consumer:
+    deploy: 
+      replicas: 5
     build:
-      context: './consumer'
-      dockerfile: Dockerfile
+      context: '.'
+      dockerfile: './consumer/Dockerfile'
     image: "consumer"
     environment:
       - DOCKER_COMPOSE=true
     depends_on: 
       - rabbitmq
-    profiles:
-      - clients
-  consumer-b:
-    build:
-      context: './consumer'
-      dockerfile: Dockerfile
-    image: "consumer"
-    environment:
-      - DOCKER_COMPOSE=true
-    depends_on: 
-      - rabbitmq
-    profiles:
-      - clients
-  consumer-c:
-    build:
-      context: './consumer'
-      dockerfile: Dockerfile
-    image: "consumer"
-    environment:
-      - DOCKER_COMPOSE=true
-    depends_on: 
-      - rabbitmq
-    profiles:
-      - clients
+
   producer:
     build:
-      context: './producer'
-      dockerfile: Dockerfile
+      context: '.'
+      dockerfile: './producer/Dockerfile'
     image: "producer"
     environment:
       - DOCKER_COMPOSE=true
     depends_on: 
       - rabbitmq
-    profiles:
-      - clients
 
