@@ -1,12 +1,6 @@
-import { connect } from "https://deno.land/x/amqp@v0.21.0/mod.ts";
 import { sleep } from "https://deno.land/x/sleep@v1.2.1/mod.ts";
+import connection from "../lib/connection.ts";
 
-const connection = await connect({
-  hostname: "rabbitmq",
-  port: 5672,
-  username: "guest",
-  password: "guest",
-});
 const channel = await connection.openChannel();
 
 const queueName = "my.queue";
